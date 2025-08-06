@@ -1,53 +1,123 @@
+<!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-        rel="stylesheet">
-    <title>Guiminamflix</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recomendações de Filmes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #222;
+            color: white;
+            text-align: center;
+            padding: 1em;
+        }
+        h1 {
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .filter {
+            margin-bottom: 20px;
+        }
+        select, button {
+            padding: 10px;
+            font-size: 16px;
+            margin-right: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #222;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #444;
+        }
+        .movie-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .movie {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .movie h3 {
+            margin: 0 0 10px;
+        }
+    </style>
 </head>
-
 <body>
-    <header>GUIMINAMFLIX</header>
-
-    <section class="chamada">
-        <div class="chamada-texto">
-            <h1>ATRAVÉS DO ARANHAVERSO</h1>
-            <p>#homem-aranha</p>
+    <header>
+        <h1>Recomendações de Filmes</h1>
+    </header>
+    <div class="container">
+        <div class="filter">
+            <label for="genre">Gênero:</label>
+            <select id="genre">
+                <option value="all">Todos</option>
+                <option value="action">Ação</option>
+                <option value="comedy">Comédia</option>
+                <option value="drama">Drama</option>
+                <option value="scifi">Ficção Científica</option>
+            </select>
+            <button onclick="recommendMovies()">Recomendar</button>
         </div>
+        <div id="movieList" class="movie-list"></div>
+    </div>
+    <script>
+        const movies = [
+            { title: "Mad Max: Estrada da Fúria", genre: "action", description: "Uma perseguição épica em um mundo pós-apocalíptico." },
+            { title: "Superbad", genre: "comedy", description: "Uma comédia sobre amizade e aventuras adolescentes." },
+            { title: "O Poderoso Chefão", genre: "drama", description: "A saga de uma família mafiosa italiana." },
+            { title: "Interestelar", genre: "scifi", description: "Uma jornada espacial para salvar a humanidade." },
+            { title: "Vingadores: Ultimato", genre: "action", description: "Heróis se unem para derrotar um inimigo poderoso." },
+            { title: "Se Beber, Não Case", genre: "comedy", description: "Uma noite de despedida de solteiro que dá errado." },
+            { title: "Clube da Luta", genre: "drama", description: "Um homem cria um clube underground com consequências inesperadas." },
+            { title: "Blade Runner 2049", genre: "scifi", description: "Um detetive explora segredos em um futuro distópico." }
+        ];
 
-        <div>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/NlKBJ3pjnPo"
-                title="YouTube video player" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-        </div>
-    </section>
+        function recommendMovies() {
+            const genre = document.getElementById("genre").value;
+            const movieList = document.getElementById("movieList");
+            movieList.innerHTML = "";
 
-    <section class="categoria">
-        <h2>Filmes e séries</h2>
-        <div class="categoria-videos">
-            <a href="https://www.youtube.com/watch?v=cs15QqG6Gjc">
-                <img src="https://img.youtube.com/vi/cs15QqG6Gjc/maxresdefault.jpg" />
-            </a>
-            <a href="https://www.youtube.com/watch?v=nCmIwcycUJ8">
-                <img src="https://img.youtube.com/vi/nCmIwcycUJ8/maxresdefault.jpg" />
-            </a>
-            <a href="https://www.youtube.com/watch?v=FvRmEapoHRc">
-                <img src="https://img.youtube.com/vi/FvRmEapoHRc/maxresdefault.jpg" />
-            </a>
-            <a href="https://www.youtube.com/watch?v=Ipkw_hWW-Hw">
-                <img src="https://img.youtube.com/vi/Ipkw_hWW-Hw/maxresdefault.jpg" />
-            </a>
-            <a href="https://www.youtube.com/watch?v=d4DzMNGoyis">
-                <img src="https://img.youtube.com/vi/d4DzMNGoyis/maxresdefault.jpg" />
-            </a>
-        </div>
-    </section>
+            const filteredMovies = genre === "all" ? movies : movies.filter(movie => movie.genre === genre);
 
+            if (filteredMovies.length === 0) {
+                movieList.innerHTML = "<p>Nenhum filme encontrado para este gênero.</p>";
+                return;
+            }
+
+            filteredMovies.forEach(movie => {
+                const movieDiv = document.createElement("div");
+                movieDiv.className = "movie";
+                movieDiv.innerHTML = `
+                    <h3>${movie.title}</h3>
+                    <p>${movie.description}</p>
+                    <p><strong>Gênero:</strong> ${movie.genre.charAt(0).toUpperCase() + movie.genre.slice(1)}</p>
+                `;
+                movieList.appendChild(movieDiv);
+            });
+        }
+
+        // Carrega todos os filmes ao iniciar
+        recommendMovies();
+    </script>
 </body>
-
 </html>
